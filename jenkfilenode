@@ -1,6 +1,0 @@
-node{
-  
-  stage ('git clone') {
-  git 'https://github.com/sahitya15/CICDTask.git'
-  }
-}
