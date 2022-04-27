@@ -1,61 +1,64 @@
-pipeline
-{
-
-	agent any
+pipeline {
+    agent any
 	
-		stages {
-				stage ('scm checkout') {
-					steps {
-						git 'https://github.com/chaitanyapratap19/maven-project.git'
-					}
-				}
+    stages{
+        stage('get scm'){
+            steps{
 
+			checkout([$class: 'GitSCM', branches: [[name: '*/master']],
+			extensions: [], 
+			userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/sahitya15/CICDTask.git']]])
+       
+        }
+    }
 
-
-				stage ('code test') {
-				       steps {
-						withMaven(maven: 'MAVEN_HOME') {
-							sh 'mvn test'
-						}
-				       }	       
-				}
-			
-			     stage ('code package') {
-				       steps {
-						withMaven(maven: 'MAVEN_HOME') {
-							sh 'mvn package'
-						}
-				       }	       
-			      }
-			
-			
-			    stage ('code install') {
-				       steps {
-						withMaven(maven: 'MAVEN_HOME') {
-							sh 'mvn install'
-						}
-				       }	       
-				}
-			
-			
-			
-			stage ('ssh tomcat') {
-				       steps {
-						sshPublisher(publishers: [sshPublisherDesc(configName: 'Tomcat', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/var/lib/tomcat/webapps', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-				       }	       
-			}
-			
-			
-			stage ('deploy to tomcat') {
-				steps {
-						sshagent (['172.31.93.65']) {
-						sh 'scp -o StrictHostKeyChecking=no */target/*.war ec2-user@172.31.93.65:/var/lib/tomcat/webapps'
-						}
-				}
+         stage('Mvn Package'){
+             steps{
+                 
+         sh 'mvn clean package'
+            
+             }
+    }
 	
+	stage ('upload war to nexus'){
+	  steps {
+	  nexusArtifactUploader artifacts: [
+	  [
+	  artifactId: 'maven-project',
+	  classifier: '', 
+	  file: 'target/Maven Project-1.0.0.war',
+	  type: 'war'
+	  ]
+	  ], 
+	  credentialsId: 'nexux-user-credentials', 
+	  groupId: 'com.example.maven-project',
+	  nexusUrl: '54.175.170.191:8081',
+	  nexusVersion: 'nexus3',
+	  protocol: 'http',
+	  repository: 'http://54.175.170.191:8081/repository/maven-nexus-repo/', 
+	  version: '1.0.0'
+	
+	}
+	}
+	
+	
+	stage('Sonarqube') {
+    environment {
+        scannerHome = tool 'SonarQubeScanner'
+    }
+    steps {
+        withSonarQubeEnv(installationName: 'SonarCloudOne', credentialsId: 'sonarqube') {
+            sh "${scannerHome}/bin/sonar-scanner"
+        }
+        timeout(time: 10, unit: 'MINUTES') {
+            waitForQualityGate abortPipeline: true
+        }
+    }
 }
-				       
-	        	}				       
 
+    }
+	}
 	
-}
+	
+	
+	

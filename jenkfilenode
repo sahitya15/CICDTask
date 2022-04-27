@@ -1,6 +1,6 @@
 node{
   
   stage ('git clone') {
-  git 'https://github.com/chaitanyapratap19/maven-project.git'
+  git 'https://github.com/sahitya15/CICDTask.git'
   }
 }
