@@ -20,11 +20,11 @@ pipeline {
              }
     }
 	
-	stage ('upload war to nexus'){
-	  steps {
-	  nexusArtifactUploader artifacts: [[artifactId: 'maven-project', classifier: '', file: 'webapp/target/webapp.war', type: 'war']], credentialsId: 'nexux-user-credentials', groupId: 'com.example.maven-project', nexusUrl: '34.234.79.194:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'http://34.234.79.194:8081/repository/maven-nexus-repo/', version: '1.0-SNAPSHOT'
-	}
-	
+	stage("Publish to Nexus Repository Manager") {
+            steps {
+               nexusArtifactUploader artifacts: [[artifactId: 'webapp', classifier: '', file: '/var/lib/jenkins/workspace/pipeline-project/webapp/target/webapp.war', type: 'war']], credentialsId: 'nexux-user-credentials', groupId: 'com.maven-project', nexusUrl: '34.234.79.194:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'http://34.234.79.194:8081/repository/maven-nexus-repo/', version: '1.0-SNAPSHOT'
+            }
+	    }
 	
 	stage('Sonarqube') {
     environment {
