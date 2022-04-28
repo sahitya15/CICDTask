@@ -26,7 +26,7 @@ pipeline {
 	  [
 	  artifactId: 'maven-project',
 	  classifier: '', 
-	  file: 'webapp.war',
+	  file: 'pom.xml',
 	  type: 'war'
 	  ]
 	  ], 
