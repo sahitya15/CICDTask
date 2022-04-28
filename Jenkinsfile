@@ -28,18 +28,17 @@ pipeline {
 	
     stage('SonarQube Analysis') {
 		 steps {
-        def mvnHome =  tool name: 'maven-3', type: 'maven'
-        withSonarQubeEnv('sonar') { 
-          sh "${mvnHome}/bin/mvn sonar:sonar"
-		}
+        withSonarQubeEnv('sonar') 
+        {
+                 // some block                                 
+                                  
+                withMaven(jdk: 'JAVA_HOME', maven: 'MAVEN_HOME') {
+                 sh 'mvn clean package sonar:sonar'
+                                   }
+                          }
         }
     }
 	
 }
 
     }
-	}
-	
-	
-	
-	
