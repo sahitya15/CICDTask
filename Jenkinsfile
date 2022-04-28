@@ -27,16 +27,20 @@ pipeline {
 	    }
 	
 	stage('Sonarqube') {
-    environment {
-        scannerHome = tool 'SonarQubeScanner'
-    }
-    steps {
-        withSonarQubeEnv(installationName: 'SonarCloudOne', credentialsId: 'sonarqube') {
-            sh "${scannerHome}/bin/sonar-scanner"
-        }
-        timeout(time: 10, unit: 'MINUTES') {
-            waitForQualityGate abortPipeline: true
-        }
+    
+            stage ('build && SonarQube analysis') {
+                  steps {
+                          withSonarQubeEnv('sonar') {
+                                  // some block                                 
+                                  
+                                  withMaven(jdk: 'JAVA_HOME', maven: 'MAVEN_HOME') {
+                                    sh 'mvn clean package sonar:sonar'
+                                   }
+                          }
+
+                  }
+            
+            }
     }
 }
 
