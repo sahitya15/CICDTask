@@ -26,7 +26,7 @@ pipeline {
 	  [
 	  artifactId: 'maven-project',
 	  classifier: '', 
-	  file: 'pom.xml',
+	  file: 'webapp/target/maven-project-1.0-SNAPSHOT.war',
 	  type: 'war'
 	  ]
 	  ], 
@@ -36,7 +36,7 @@ pipeline {
 	  nexusVersion: 'nexus3',
 	  protocol: 'http',
 	  repository: 'http://34.234.79.194:8081/repository/maven-nexus-repo/', 
-	  version: '1.0.0'
+	  version: '1.0-SNAPSHOT'
 	
 	}
 	}
