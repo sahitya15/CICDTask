@@ -22,23 +22,7 @@ pipeline {
 	
 	stage ('upload war to nexus'){
 	  steps {
-	  nexusArtifactUploader artifacts: [
-	  [
-	  artifactId: 'maven-project',
-	  classifier: '', 
-	  file: 'webapp/target/maven-project-1.0-SNAPSHOT.war',
-	  type: 'war'
-	  ]
-	  ], 
-	  credentialsId: 'nexux-user-credentials', 
-	  groupId: 'com.example.maven-project',
-	  nexusUrl: '34.234.79.194:8081',
-	  nexusVersion: 'nexus3',
-	  protocol: 'http',
-	  repository: 'http://34.234.79.194:8081/repository/maven-nexus-repo/', 
-	  version: '1.0-SNAPSHOT'
-	
-	}
+	  nexusArtifactUploader artifacts: [[artifactId: 'maven-project', classifier: '', file: 'webapp.war', type: 'war']], credentialsId: 'nexux-user-credentials', groupId: 'com.example.maven-project', nexusUrl: '34.234.79.194:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'http://34.234.79.194:8081/repository/maven-nexus-repo/', version: '1.0-SNAPSHOT'
 	}
 	
 	
