@@ -32,10 +32,10 @@ pipeline {
 	  ], 
 	  credentialsId: 'nexux-user-credentials', 
 	  groupId: 'com.example.maven-project',
-	  nexusUrl: '54.175.170.191:8081',
+	  nexusUrl: '34.234.79.194:8081',
 	  nexusVersion: 'nexus3',
 	  protocol: 'http',
-	  repository: 'http://54.175.170.191:8081/repository/maven-nexus-repo/', 
+	  repository: 'http://34.234.79.194:8081/repository/maven-nexus-repo/', 
 	  version: '1.0.0'
 	
 	}
