@@ -1,4 +1,4 @@
 FROM tomcat:latest
 EXPOSE 8080
-COPY target/webapp.war webapp.war 
+COPY /var/lib/jenkins/workspace/testing/ webapp.war 
 ENTRYPOINT ["java","-war","/webapp.war"]
